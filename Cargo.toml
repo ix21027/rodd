@@ -1,0 +1,10 @@
+[package]
+name = "voeru"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+chaser-oxide = { version = "0.1.2", features = ["chromiumoxide_fetcher", "fetcher", "_fetcher-native-tokio", "_fetcher-rustls-tokio"] }
+futures = "0.3.32"
+openssl = "0.10.75"
+tokio = { version = "1.49.0", features = ["full"] }
