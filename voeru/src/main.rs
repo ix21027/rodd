@@ -1,8 +1,6 @@
 use std::path::Path;
 
-use chaser_oxide::browser::{Browser, BrowserConfig};
 use chaser_oxide::fetcher::{BrowserFetcher, BrowserFetcherOptions};
-use futures::StreamExt;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -20,3 +18,4 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 
 }
+
