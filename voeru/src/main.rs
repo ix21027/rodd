@@ -15,30 +15,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .build()?,
     );
     let info = fetcher.fetch().await?;
-
-    // Verify browser
-    let (mut browser, mut handler) = Browser::launch(
-        BrowserConfig::builder()
-            .chrome_executable(info.executable_path)
-            .build()?,
-    )
-    .await?;
-
-    let handle = tokio::spawn(async move {
-        loop {
-            match handler.next().await {
-                Some(h) => match h {
-                    Ok(_) => continue,
-                    Err(_) => break,
-                },
-                None => break,
-            }
-        }
-    });
-
    
     println!("it worked!");
-
-    handle.await?;
     Ok(())
+
 }
