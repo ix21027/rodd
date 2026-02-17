@@ -14,10 +14,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Cache Chrome Binary
+        id: cache-chrome
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/chrome-bin
+          key: ${{ runner.os }}-chrome-1520176
+
+      - name: Download Chrome if not cached
+        if: steps.cache-chrome.outputs.cache-hit != 'true'
         run: |
+          mkdir -p ${{ github.workspace }}/chrome-bin
+          REVISION=1520176
+          URL="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F${REVISION}%2Fchrome-linux.zip?alt=media"
+          curl -SL "$URL" -o chrome.zip
+          unzip chrome.zip
+          mv chrome-linux/* ${{ github.workspace }}/chrome-bin/
+          rm chrome.zip
+
+      - name: Add Chrome to PATH & Install Dependencies
+        run: |
+          chmod +x ${{ github.workspace }}/chrome-bin/chrome
+          echo "${{ github.workspace }}/chrome-bin" >> $GITHUB_PATH
           sudo apt-get update
-          sudo apt-get install -y fonts-liberation fonts-ipafont-gothic fonts-wqy-zenhei xvfb chromium-browser
+          sudo apt-get install -y fonts-liberation fonts-ipafont-gothic fonts-wqy-zenhei xvfb libnss3 libatk-bridge2.0-0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2
       
       - name: Run App
         id: run-app
