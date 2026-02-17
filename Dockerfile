@@ -11,7 +11,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o rodd main.go
 
 FROM rust:1.93-slim-bookworm as builder
 WORKDIR /build
-COPY . .
+COPY ./voeru .
 RUN cargo build --release
 
 FROM debian:bookworm-slim
