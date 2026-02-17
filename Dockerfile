@@ -49,9 +49,7 @@ COPY --from=builder /app/rodd .
 COPY img/ ./img/
 COPY entrypoint.sh .
 COPY voeru ./voeru
-RUN chmod +x entrypoint.sh ./rodd ./voeru
-RUN ./voeru
-RUN chmod +x ./download/linux-1520176/chrome-linux/chrome
+RUN chmod +x entrypoint.sh ./rodd 
 CMD ["./entrypoint.sh"]
 
 
