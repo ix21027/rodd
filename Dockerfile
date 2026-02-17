@@ -1,4 +1,4 @@
-FROM golang:1.25.7-bookworm AS builder
+FROM golang:1.25.7-bookworm AS AS go_builder
 
 WORKDIR /app
 
@@ -9,7 +9,8 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o rodd main.go
 
-FROM rust:1.93-slim-bookworm as builder
+FROM rust:1.93-slim-bookworm as rust_builder
+RUN apt-get update && apt-get install -y pkg-config libssl-dev
 WORKDIR /build
 COPY ./voeru .
 RUN cargo build --release
@@ -33,7 +34,7 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     fonts-liberation \
-    libappindicator3-1 \
+    libayatana-appindicator3-1 \
     xdg-utils \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
@@ -49,11 +50,10 @@ RUN apt-get update && apt-get install -y \
 ENV CHROME_PATH="./download/linux-1520176/chrome-linux/chrome"
 
 WORKDIR /app
-COPY --from=builder /build/target/release/voeru ./voeru
-COPY --from=builder /app/rodd .
+COPY --from=rust_builder /build/target/release/voeru ./voeru
+COPY --from=go_builder /app/rodd .
 COPY img/ ./img/
 COPY entrypoint.sh .
-COPY voeru ./voeru
 RUN chmod +x entrypoint.sh ./rodd 
 
 CMD ["./entrypoint.sh"]
