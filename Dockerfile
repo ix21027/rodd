@@ -1,4 +1,14 @@
-# Используем свежий Debian (он легче Ubuntu, но полностью совместим)
+FROM golang:1.21-bullseye AS builder
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o rodd main.go
+
 FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y \
@@ -32,7 +42,7 @@ ENV CHROME_PATH="/opt/chrome-linux/chrome"
 
 WORKDIR /app
 
-COPY rodd ./rodd
+COPY --from=builder /app/rodd .
 COPY img/ ./img/
 COPY entrypoint.sh .
 
@@ -41,7 +51,4 @@ RUN chmod +x entrypoint.sh ./rodd
 CMD ["./entrypoint.sh"]
 
 
-
-WORKDIR /app
-COPY my_bot_binary ./app_binary
 
