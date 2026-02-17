@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     xvfb \
+    xauth \
     ca-certificates \
     libnss3 \
     libatk-bridge2.0-0 \
