@@ -1,4 +1,4 @@
-FROM golang:1.25.7-bookworm AS AS go_builder
+FROM golang:1.25.7-bookworm AS go_builder
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY . .
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o rodd main.go
 
-FROM rust:1.93-slim-bookworm as rust_builder
+FROM rust:1.93-slim-bookworm AS rust_builder
 RUN apt-get update && apt-get install -y pkg-config libssl-dev
 WORKDIR /build
 COPY ./voeru .
@@ -57,6 +57,7 @@ COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh ./rodd 
 
 CMD ["./entrypoint.sh"]
+
 
 
 
