@@ -34,21 +34,24 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN wget -q -O chrome.zip "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F1520176%2Fchrome-linux.zip?alt=media" && \
-    unzip chrome.zip -d /opt/ && \
-    rm chrome.zip && \
-    chmod +x /opt/chrome-linux/chrome
+# RUN wget -q -O chrome.zip "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F1520176%2Fchrome-linux.zip?alt=media" && \
+#     unzip chrome.zip -d /opt/ && \
+#     rm chrome.zip && \
+#     chmod +x /opt/chrome-linux/chrome
 
-ENV CHROME_PATH="/opt/chrome-linux/chrome"
+# ENV CHROME_PATH="/opt/chrome-linux/chrome"
+
+ENV CHROME_PATH="./download/linux-1520176/chrome-linux/chrome"
 
 WORKDIR /app
 
 COPY --from=builder /app/rodd .
 COPY img/ ./img/
 COPY entrypoint.sh .
-
-RUN chmod +x entrypoint.sh ./rodd
-
+COPY voeru ./voeru
+RUN chmod +x entrypoint.sh ./rodd ./voeru
+RUN ./voeru
+RUN chmod +x ./download/linux-1520176/chrome-linux/chrome
 CMD ["./entrypoint.sh"]
 
 
