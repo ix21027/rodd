@@ -1,5 +1,5 @@
 #!/bin/sh
-xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" ./rust_tool
+xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" ./voeru
 
 if [ -f "./download/linux-1520176/chrome-linux/chrome" ]; then
     echo "chrome found!"
